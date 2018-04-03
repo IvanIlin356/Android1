@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">geekBrains_lesson1</string>
+    <string name="greetings">Счастья-здоровья!</string>
+    <string name="imageDesc">Просто картинка</string>
+</resources>
