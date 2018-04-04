@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="weather_app_greetings">Select city:</string>
+    <string name="show_temp">Show Temperature</string>
+    <string name="show_temp_textview">%1$s\n%2$d C</string>
+    <string-array name="cities_list">
+        <item>Berlin</item>
+        <item>Moscow</item>
+        <item>New-York</item>
+        <item>Tokyo</item>
+    </string-array>
 </resources>
