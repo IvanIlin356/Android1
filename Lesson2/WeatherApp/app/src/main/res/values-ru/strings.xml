@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="weather_app_greetings">Выберите город:</string>
+    <string name="show_temp">Показать Температуру</string>
+    <string-array name="cities_list">
+        <item>Берлин</item>
+        <item>Москва</item>
+        <item>Нью-Йорк</item>
+        <item>Токио</item>
+    </string-array>
+</resources>
