@@ -1,6 +1,7 @@
 package com.geekbrains.ivanilin.fitnessapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ public class ExerciseActivity extends AppCompatActivity {
     TextView resultDateValue;
     TextView resultCountValue;
     Button saveResultButton;
+    private Button shareResultButton;
+    private TextView excerciseaNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,10 @@ public class ExerciseActivity extends AppCompatActivity {
             resultDateValue.setText(sharedPreferences.getString(PREF_RECORD_DATE, ""));
         }
 
+        setListeners();
+    }
+
+    private void setListeners() {
         tryCountValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -71,6 +78,19 @@ public class ExerciseActivity extends AppCompatActivity {
                 }
             }
         });
+
+        shareResultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_record_template,
+                        excerciseaNameTextView.getText().toString(),
+                        resultCountValue.getText().toString(),
+                        resultDateValue.getText().toString()));
+                startActivity(shareIntent);
+            }
+        });
     }
 
     private void initViews(){
@@ -79,5 +99,7 @@ public class ExerciseActivity extends AppCompatActivity {
         resultDateValue = (TextView)findViewById(R.id.result_date_value);
         saveResultButton = (Button)findViewById(R.id.save_result);
         tryCountTextView = (TextView)findViewById(R.id.try_count_textview);
+        shareResultButton = (Button)findViewById(R.id.shareResultButton);
+        excerciseaNameTextView = (TextView)findViewById(R.id.excercise_name);
     }
 }

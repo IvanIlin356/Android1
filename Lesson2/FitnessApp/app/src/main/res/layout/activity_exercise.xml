@@ -15,6 +15,7 @@
     tools:context=".ExerciseActivity">
 
     <TextView
+        android:id="@+id/excercise_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/exercise_1_name"
@@ -57,40 +58,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_result_button"/>
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/result_date_textview"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/result_date_textview"/>
         <TextView
             android:id="@+id/result_date_value"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/result_date_textview"
             android:text="0"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/result_count_textview"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/result_date_textview"
             android:text="@string/result_count_textview"/>
         <TextView
             android:id="@+id/result_count_value"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/result_count_textview"
+            android:layout_below="@id/result_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"/>
-    </LinearLayout>
+        <Button
+            android:id="@+id/shareResultButton"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:text="@string/share_button"/>
+    </RelativeLayout>
     <TextView
         android:layout_marginTop="8dp"
         android:id="@+id/exercise_description_textview"
