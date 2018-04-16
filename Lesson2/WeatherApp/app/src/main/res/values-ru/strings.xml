@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="weather_app_greetings">Выберите город:</string>
-    <string name="show_temp">Показать Температуру</string>
+    <string name="show_temp">Температура</string>
     <string-array name="cities_list">
         <item>Берлин</item>
         <item>Москва</item>
         <item>Нью-Йорк</item>
         <item>Токио</item>
     </string-array>
+    <string name="city_weather_label">Текущая погода:</string>
+    <string name="shareWith">Поделиться</string>
+    <string name="show_city_info">Показать информацию</string>
+    <string name="share_temp_template">Сегодня хороший день! Погода в городе %1$s: %2$d C</string>
+    <string name="call_wrong_intent">Вызвать несуществующий Intent</string>
+    <string name="temp_sign">Температура: </string>
 </resources>

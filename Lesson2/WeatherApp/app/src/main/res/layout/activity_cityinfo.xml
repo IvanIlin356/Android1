@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="16dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginBottom="8dp"
+    tools:context=".CityinfoActivity">
+
+    <TextView
+        android:id="@+id/city_name_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        tools:text="City"/>
+
+    <TextView
+        android:id="@+id/city_weather_label"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/city_name_label"
+        android:text="@string/city_weather_label"/>
+
+    <TextView
+        android:id="@+id/city_temp_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/city_weather_label"
+        android:layout_above="@id/bottom_layout"
+        android:gravity="center"
+        tools:text="Temp 3C"/>
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp">
+        <Button
+            android:id="@+id/show_temp_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_temp"/>
+
+        <Button
+            android:layout_alignParentRight="true"
+            android:id="@+id/share_with_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shareWith"/>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -13,23 +13,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weather_app_greetings" />
-    <Spinner
-        android:layout_marginTop="8dp"
-        android:id="@+id/city_select_spinner"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/cities_list"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+        <Spinner
+            android:id="@+id/city_select_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/cities_list"/>
+        <TextView
+            android:id="@+id/temp_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="@string/temp_sign"/>
+        <TextView
+            android:id="@+id/current_city_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+    </LinearLayout>
     <Button
         android:layout_marginTop="8dp"
-        android:id="@+id/show_temp_button"
+        android:id="@+id/show_city_info_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/show_temp"/>
-    <TextView
-        android:id="@+id/city_temp_textview"
+        android:text="@string/show_city_info"/>
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/сall_wrong_intent_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/call_wrong_intent"/>
 
 </LinearLayout>
