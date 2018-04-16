@@ -1,8 +1,10 @@
 package com.geekbrains.ivanilin.weatherapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class CityinfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onCreate");
         setContentView(R.layout.activity_cityinfo);
         cityName = getIntent().getStringExtra(MainActivity.INTENT_CITY);
 
@@ -33,6 +36,11 @@ public class CityinfoActivity extends AppCompatActivity {
 
         //showCityTempButton.callOnClick();
         showCityTempButton.performClick();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     private void setListeners() {
@@ -66,5 +74,37 @@ public class CityinfoActivity extends AppCompatActivity {
 
         showCityTempButton = (Button)findViewById(R.id.show_temp_button);
         shareWithFriendButton = (Button)findViewById(R.id.share_with_button);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onResume");
+        super.onResume();
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onDestroy");
+        super.onDestroy();
     }
 }

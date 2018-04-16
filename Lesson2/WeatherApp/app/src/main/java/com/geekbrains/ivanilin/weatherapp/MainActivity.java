@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,7 +20,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_LAST_CITY = "weatherapp_last_city";
     public static final String INTENT_CITY = "weatherapp_intent_city";
     public static final String CURRENT_CITY_TEMP = "currentCityTemp";
+    public static final String CURRENT_CITY_TEMP2 = "currentCityTemp2";
     public static final int REQUEST_CODE = 103;
+
+    public static final String LOG_TAG = "weatherAppLogTag";
+
     SharedPreferences sharedPreferences;
 
     Spinner citySpinner;
@@ -29,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentCityTemp;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "mainActivity - onCreate");
         setContentView(R.layout.activity_main);
 
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -41,7 +47,53 @@ public class MainActivity extends AppCompatActivity {
             citySpinner.setSelection(sharedPreferences.getInt(PREF_LAST_CITY, 0));
         }
 
+        if (savedInstanceState != null){
+            showCurrentTemp(savedInstanceState.getString(CURRENT_CITY_TEMP2));
+        }
+
         setListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(LOG_TAG, "mainActivity - onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(LOG_TAG, "mainActivity - onResume");
+        super.onResume();
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        Log.d(LOG_TAG, "mainActivity - onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(LOG_TAG, "mainActivity - onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(LOG_TAG, "mainActivity - onDestroy");
+        super.onDestroy();
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState");
+        outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
@@ -49,11 +101,15 @@ public class MainActivity extends AppCompatActivity {
         //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             if (data != null){
-                tempSignTextView.setVisibility(TextView.VISIBLE);
-                currentCityTemp.setVisibility(TextView.VISIBLE);
-                currentCityTemp.setText(String.valueOf(data.getIntExtra(CURRENT_CITY_TEMP, 0)));
+                showCurrentTemp(String.valueOf(data.getIntExtra(CURRENT_CITY_TEMP, 0)));
             }
         }
+    }
+
+    private void showCurrentTemp(String currentTemp){
+        tempSignTextView.setVisibility(TextView.VISIBLE);
+        currentCityTemp.setVisibility(TextView.VISIBLE);
+        currentCityTemp.setText(currentTemp);
     }
 
     private void setListeners() {
