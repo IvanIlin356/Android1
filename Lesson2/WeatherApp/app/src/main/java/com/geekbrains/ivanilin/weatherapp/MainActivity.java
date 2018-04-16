@@ -33,21 +33,24 @@ public class MainActivity extends AppCompatActivity {
     private TextView tempSignTextView;
     private TextView currentCityTemp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "mainActivity - onCreate");
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-
         initViews();
+
+        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
         if (sharedPreferences.contains(PREF_LAST_CITY)){
             citySpinner.setSelection(sharedPreferences.getInt(PREF_LAST_CITY, 0));
         }
 
+
         if (savedInstanceState != null){
+            Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Read, value: " + savedInstanceState.getString(CURRENT_CITY_TEMP2));
             showCurrentTemp(savedInstanceState.getString(CURRENT_CITY_TEMP2));
         }
 
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        //Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState");
+        Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Save, value: " + currentCityTemp.getText().toString());
         outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
         super.onSaveInstanceState(outState);
 
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private void showCurrentTemp(String currentTemp){
         tempSignTextView.setVisibility(TextView.VISIBLE);
         currentCityTemp.setVisibility(TextView.VISIBLE);
-        currentCityTemp.setText(currentTemp);
+        currentCityTemp.setText(String.valueOf(currentTemp));
     }
 
     private void setListeners() {
@@ -148,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
         citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    tempSignTextView.setVisibility(TextView.INVISIBLE);
-                    currentCityTemp.setVisibility(TextView.INVISIBLE);
+                //tempSignTextView.setVisibility(TextView.INVISIBLE);
+                //currentCityTemp.setVisibility(TextView.INVISIBLE);
             }
 
             @Override
