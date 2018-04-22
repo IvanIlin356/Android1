@@ -35,6 +35,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    <RelativeLayout
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/weather_forecast_type_radiogroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/one_day_weather_forecast_radiobutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/one_day_weather_forecast"
+                android:checked="true" />
+            <RadioButton
+                android:id="@+id/week_weather_forecast_radiobutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/week_weather_forecast"/>
+        </RadioGroup>
+        <CheckBox
+            android:id="@+id/show_pressure_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/show_pressure"/>
+    </RelativeLayout>
     <Button
         android:layout_marginTop="8dp"
         android:id="@+id/show_city_info_button"

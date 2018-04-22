@@ -2,13 +2,18 @@
     <string name="app_name">WeatherApp</string>
     <string name="weather_app_greetings">Select city:</string>
     <string name="show_temp">Temperature</string>
-    <string name="show_temp_template">%1$s\n%2$d C</string>
+    <string name="show_temp_template">Temp %1$d C</string>
+    <string name="show_temp_template_short">%1$d C</string>
+    <string name="show_pressure_template">Pressure %1$d</string>
     <string name="share_temp_template">Today is a nice day! Weather in %1$s: %2$d C</string>
     <string name="city_weather_label">Current weather:</string>
     <string name="shareWith">Share</string>
     <string name="show_city_info">Show City information</string>
     <string name="call_wrong_intent">Call wrong intent</string>
     <string name="temp_sign">Temperature: </string>
+    <string name="one_day_weather_forecast">One day forecast</string>
+    <string name="week_weather_forecast">Week forecast</string>
+    <string name="show_pressure">Show pressure</string>
     <string-array name="cities_list">
         <item>Berlin</item>
         <item>Moscow</item>

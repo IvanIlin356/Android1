@@ -14,4 +14,9 @@
     <string name="share_temp_template">Сегодня хороший день! Погода в городе %1$s: %2$d C</string>
     <string name="call_wrong_intent">Вызвать несуществующий Intent</string>
     <string name="temp_sign">Температура: </string>
+    <string name="one_day_weather_forecast">Прогноз на день</string>
+    <string name="week_weather_forecast">Прогноз на неделю</string>
+    <string name="show_pressure">Показать давление</string>
+    <string name="show_temp_template">Температура %1$d C</string>
+    <string name="show_pressure_template">Давление %1$d</string>
 </resources>

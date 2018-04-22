@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginTop="16dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
     android:layout_marginBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical"
     tools:context=".CityinfoActivity">
 
     <TextView
@@ -16,24 +16,217 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="25sp"
-        tools:text="City"/>
+        tools:text="City" />
 
     <TextView
         android:id="@+id/city_weather_label"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/city_name_label"
-        android:text="@string/city_weather_label"/>
+        android:layout_marginTop="8dp"
+        android:text="@string/city_weather_label" />
 
-    <TextView
-        android:id="@+id/city_temp_textview"
+    <RelativeLayout
+        android:id="@+id/current_temp_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/city_weather_label"
+        android:layout_above="@id/week_temperature_layout">
+
+        <TextView
+            android:id="@+id/city_temp_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            tools:text="Temp 3C" />
+
+        <TextView
+            android:id="@+id/city_pressure_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/city_temp_textview"
+            android:textStyle="italic"
+            tools:text="Pressure 760" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/week_temperature_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_above="@id/bottom_layout"
-        android:gravity="center"
-        tools:text="Temp 3C"/>
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/day_1_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/day_2_date"
+            tools:text="22/04" />
+
+        <TextView
+            android:id="@+id/day_1_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_1_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_1_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_1_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_2_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/day_3_date"
+            android:layout_marginTop="8dp"
+            tools:text="23/04" />
+
+        <TextView
+            android:id="@+id/day_2_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_2_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_2_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_2_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_3_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/day_4_date"
+            android:layout_marginTop="8dp"
+            tools:text="24/04" />
+
+        <TextView
+            android:id="@+id/day_3_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_3_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_3_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_3_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_4_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/day_5_date"
+            android:layout_marginTop="8dp"
+            tools:text="25/04" />
+
+        <TextView
+            android:id="@+id/day_4_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_4_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_4_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_4_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_5_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/day_6_date"
+            android:layout_marginTop="8dp"
+            tools:text="26/04" />
+
+        <TextView
+            android:id="@+id/day_5_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_5_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_5_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_5_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_6_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/day_7_date"
+            android:layout_marginTop="8dp"
+            tools:text="27/04" />
+
+        <TextView
+            android:id="@+id/day_6_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_6_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_6_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_6_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+        <TextView
+            android:id="@+id/day_7_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            tools:text="28/04" />
+
+        <TextView
+            android:id="@+id/day_7_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_7_date"
+            android:layout_centerInParent="true"
+            tools:text="3 C" />
+
+        <TextView
+            android:id="@+id/day_7_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/day_7_date"
+            android:layout_alignParentEnd="true"
+            tools:text="760" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottom_layout"
@@ -41,18 +234,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp">
+
         <Button
             android:id="@+id/show_temp_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/show_temp"/>
+            android:text="@string/show_temp" />
 
         <Button
-            android:layout_alignParentRight="true"
             android:id="@+id/share_with_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/shareWith"/>
+            android:layout_alignParentRight="true"
+            android:text="@string/shareWith" />
     </RelativeLayout>
 
 </RelativeLayout>
