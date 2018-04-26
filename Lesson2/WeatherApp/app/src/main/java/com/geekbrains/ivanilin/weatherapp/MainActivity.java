@@ -5,17 +5,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geekbrains.ivanilin.weatherapp.db.DataBase;
+
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
     public static final String PREF_NAME = "com.geekbrains.ivanilin.weatherapp_pref";
@@ -36,13 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    Spinner citySpinner;
-    Button showCityInfoButton;
-    private Button callWrongIntentButton;
-    private TextView tempSignTextView;
-    private TextView currentCityTemp;
     private RadioGroup forecastTypeRadioGroup;
     private CheckBox showPressureCheckBox;
+    private RecyclerView cityListRecyclerView;
+    private CityListAdapter cityListAdapter;
+    private DataBase dataBase;
 
 
     @Override
@@ -50,25 +57,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "mainActivity - onCreate");
         setContentView(R.layout.activity_main);
+        dataBase = new DataBase();
 
         initViews();
 
+        cityListAdapter = new CityListAdapter(dataBase.getCityList(), getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        cityListRecyclerView.setAdapter(cityListAdapter);
+        cityListRecyclerView.setLayoutManager(linearLayoutManager);
+
+
         loadPreferences();
 
-        if (savedInstanceState != null){
-            Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Read, value: " + savedInstanceState.getString(CURRENT_CITY_TEMP2));
-            showCurrentTemp(savedInstanceState.getString(CURRENT_CITY_TEMP2));
-        }
+//        if (savedInstanceState != null){
+//            Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Read, value: " + savedInstanceState.getString(CURRENT_CITY_TEMP2));
+//            showCurrentTemp(savedInstanceState.getString(CURRENT_CITY_TEMP2));
+//        }
 
         setListeners();
     }
 
     private void loadPreferences() {
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-
-        if (sharedPreferences.contains(PREF_LAST_CITY)){
-            citySpinner.setSelection(sharedPreferences.getInt(PREF_LAST_CITY, 0));
-        }
 
         if (sharedPreferences.contains(PREF_WEATHER_FORECAST)){
             forecastTypeRadioGroup.check(sharedPreferences.getInt(PREF_WEATHER_FORECAST, R.id.one_day_weather_forecast_radiobutton));
@@ -80,43 +90,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        Log.d(LOG_TAG, "mainActivity - onStart");
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(LOG_TAG, "mainActivity - onResume");
-        super.onResume();
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        Log.d(LOG_TAG, "mainActivity - onPause");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(LOG_TAG, "mainActivity - onStop");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(LOG_TAG, "mainActivity - onDestroy");
-        super.onDestroy();
-    }
-
-
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Save, value: " + currentCityTemp.getText().toString());
-        outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
+//        Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Save, value: " + currentCityTemp.getText().toString());
+//        outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
         super.onSaveInstanceState(outState);
 
     }
@@ -124,53 +100,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            if (data != null){
-                showCurrentTemp(String.valueOf(data.getIntExtra(CURRENT_CITY_TEMP, 0)));
-            }
-        }
+//        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+//            if (data != null){
+//                showCurrentTemp(String.valueOf(data.getIntExtra(CURRENT_CITY_TEMP, 0)));
+//            }
+//        }
     }
 
-    private void showCurrentTemp(String currentTemp){
-        tempSignTextView.setVisibility(TextView.VISIBLE);
-        currentCityTemp.setVisibility(TextView.VISIBLE);
-        currentCityTemp.setText(String.valueOf(currentTemp));
-    }
+//    private void showCurrentTemp(String currentTemp){
+//        tempSignTextView.setVisibility(TextView.VISIBLE);
+//        currentCityTemp.setVisibility(TextView.VISIBLE);
+//        currentCityTemp.setText(String.valueOf(currentTemp));
+//    }
 
     private void setListeners() {
-        showCityInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String city = citySpinner.getSelectedItem().toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(PREF_LAST_CITY, citySpinner.getSelectedItemPosition());
-                editor.apply();
-
-                Intent intent = new Intent(MainActivity.this, CityinfoActivity.class);
-                intent.putExtra(INTENT_CITY, city);
-                intent.putExtra(INTENT_WEATHER_FORECAST, forecastTypeRadioGroup.getCheckedRadioButtonId());
-                intent.putExtra(INTENT_SHOW_PRESSURE, showPressureCheckBox.isChecked());
-                //startActivity(intent);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
-
-        callWrongIntentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Intent wrongIntent = new Intent("someWrongAction");
-                    wrongIntent.setType("text/plain");
-                    wrongIntent.putExtra(Intent.EXTRA_TEXT, "someWrongAction");
-                    startActivity(wrongIntent);
-                }
-                catch (Exception ex){
-                    //Toast toast = new Toast(MainActivity.this);
-                    Toast toast = Toast.makeText(MainActivity.this, "Такой Intent не найден", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });
+//        showCityInfoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String city = citySpinner.getSelectedItem().toString();
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putInt(PREF_LAST_CITY, citySpinner.getSelectedItemPosition());
+//                editor.apply();
+//
+//                Intent intent = new Intent(MainActivity.this, CityinfoActivity.class);
+//                intent.putExtra(INTENT_CITY, city);
+//                intent.putExtra(INTENT_WEATHER_FORECAST, forecastTypeRadioGroup.getCheckedRadioButtonId());
+//                intent.putExtra(INTENT_SHOW_PRESSURE, showPressureCheckBox.isChecked());
+//                //startActivity(intent);
+//                startActivityForResult(intent, REQUEST_CODE);
+//            }
+//        });
 
 //        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -206,13 +165,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        citySpinner = (Spinner)findViewById(R.id.city_select_spinner);
-        showCityInfoButton = (Button)findViewById(R.id.show_city_info_button);
-        callWrongIntentButton = (Button)findViewById(R.id.сall_wrong_intent_button);
-        tempSignTextView = (TextView)findViewById(R.id.temp_sign);
-        currentCityTemp = (TextView)findViewById(R.id.current_city_temp);
+        cityListRecyclerView = (RecyclerView)findViewById(R.id.city_list_recycler_view);
         forecastTypeRadioGroup = (RadioGroup)findViewById(R.id.weather_forecast_type_radiogroup);
         forecastTypeRadioGroup.check(R.id.one_day_weather_forecast_radiobutton);
         showPressureCheckBox = (CheckBox)findViewById(R.id.show_pressure_checkbox);
+    }
+
+    // ==========  recycler ==========
+
+    static class CityListViewHolder extends RecyclerView.ViewHolder{
+        TextView cityItem;
+        LinearLayout linearLayout;
+
+        public CityListViewHolder(View itemView) {
+            super(itemView);
+            cityItem = itemView.findViewById(R.id.city_name_recycler_list);
+            linearLayout = itemView.findViewById(R.id.linear_layout_recycler_view);
+        }
+    }
+
+    class CityListAdapter extends RecyclerView.Adapter<CityListViewHolder>{
+        ArrayList<String> cities;
+        Context context;
+
+        public CityListAdapter(ArrayList<String> cities, Context context) {
+            this.cities = cities;
+            this.context = context;
+        }
+
+        @Override
+        public CityListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_list_item,
+                    parent, false);
+            return new CityListViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final CityListViewHolder holder, int position) {
+            String city = cities.get(holder.getAdapterPosition());
+            holder.cityItem.setText(city);
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { Intent intent = new Intent(context, CityinfoActivity.class);
+                intent.putExtra(INTENT_CITY, cities.get(holder.getAdapterPosition()));
+                intent.putExtra(INTENT_WEATHER_FORECAST, forecastTypeRadioGroup.getCheckedRadioButtonId());
+                intent.putExtra(INTENT_SHOW_PRESSURE, showPressureCheckBox.isChecked());
+                startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            if (cities != null && cities.size() != 0){
+                return cities.size();
+            }
+            return 0;
+        }
     }
 }
