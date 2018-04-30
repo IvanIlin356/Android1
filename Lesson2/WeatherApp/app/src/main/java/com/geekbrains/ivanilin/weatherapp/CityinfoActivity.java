@@ -3,7 +3,6 @@ package com.geekbrains.ivanilin.weatherapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -42,11 +39,11 @@ public class CityinfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onCreate");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onCreate");
         setContentView(R.layout.activity_cityinfo);
-        cityName = getIntent().getStringExtra(MainActivity.INTENT_CITY);
-        showPressure = getIntent().getBooleanExtra(MainActivity.INTENT_SHOW_PRESSURE, false);
-        weatherForecastType = getIntent().getIntExtra(MainActivity.INTENT_WEATHER_FORECAST, R.id.one_day_weather_forecast_radiobutton);
+        cityName = getIntent().getStringExtra(MainFragment.INTENT_CITY);
+        showPressure = getIntent().getBooleanExtra(MainFragment.INTENT_SHOW_PRESSURE, false);
+        weatherForecastType = getIntent().getIntExtra(MainFragment.INTENT_WEATHER_FORECAST, R.id.one_day_weather_forecast_radiobutton);
 
         initViews();
 
@@ -174,13 +171,13 @@ public class CityinfoActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onStart");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onResume");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onResume");
         super.onResume();
     }
 
@@ -188,19 +185,19 @@ public class CityinfoActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onPause");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onPause");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onStop");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(MainActivity.LOG_TAG, "cityInfoActivity - onDestroy");
+        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onDestroy");
         super.onDestroy();
     }
 }

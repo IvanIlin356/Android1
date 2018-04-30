@@ -3,30 +3,24 @@ package com.geekbrains.ivanilin.weatherapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geekbrains.ivanilin.weatherapp.db.DataBase;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.zip.Inflater;
 
-public class MainActivity extends AppCompatActivity {
+public class MainFragment extends Fragment {
     public static final String PREF_NAME = "com.geekbrains.ivanilin.weatherapp_pref";
     public static final String PREF_LAST_CITY = "weatherapp_last_city";
     public static final String PREF_WEATHER_FORECAST = "weatherapp_weather_forecast";
@@ -53,16 +47,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "mainActivity - onCreate");
-        setContentView(R.layout.activity_main);
+//        Log.d(LOG_TAG, "mainActivity - onCreate");
+//        setContentView(R.layout.fragment_main);
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_main, container, false);
+
         dataBase = new DataBase();
 
-        initViews();
+        initViews(root);
 
-        cityListAdapter = new CityListAdapter(dataBase.getCityList(), getApplicationContext());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        cityListAdapter = new CityListAdapter(dataBase.getCityList(), getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         cityListRecyclerView.setAdapter(cityListAdapter);
         cityListRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -75,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         setListeners();
+
+        return root;
     }
 
     private void loadPreferences() {
-        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = this.getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
         if (sharedPreferences.contains(PREF_WEATHER_FORECAST)){
             forecastTypeRadioGroup.check(sharedPreferences.getInt(PREF_WEATHER_FORECAST, R.id.one_day_weather_forecast_radiobutton));
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
 //        Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Save, value: " + currentCityTemp.getText().toString());
 //        outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
         super.onSaveInstanceState(outState);
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
 //        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
 //            if (data != null){
@@ -127,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initViews(){
-        cityListRecyclerView = (RecyclerView)findViewById(R.id.city_list_recycler_view);
-        forecastTypeRadioGroup = (RadioGroup)findViewById(R.id.weather_forecast_type_radiogroup);
+    private void initViews(View root){
+        cityListRecyclerView = (RecyclerView)root.findViewById(R.id.city_list_recycler_view);
+        forecastTypeRadioGroup = (RadioGroup)root.findViewById(R.id.weather_forecast_type_radiogroup);
         forecastTypeRadioGroup.check(R.id.one_day_weather_forecast_radiobutton);
-        showPressureCheckBox = (CheckBox)findViewById(R.id.show_pressure_checkbox);
+        showPressureCheckBox = (CheckBox)root.findViewById(R.id.show_pressure_checkbox);
     }
 
     // ==========  recycler ==========
