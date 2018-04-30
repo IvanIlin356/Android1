@@ -102,48 +102,11 @@ public class MainActivity extends AppCompatActivity {
         //super.onActivityResult(requestCode, resultCode, data);
 //        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
 //            if (data != null){
-//                showCurrentTemp(String.valueOf(data.getIntExtra(CURRENT_CITY_TEMP, 0)));
 //            }
 //        }
     }
 
-//    private void showCurrentTemp(String currentTemp){
-//        tempSignTextView.setVisibility(TextView.VISIBLE);
-//        currentCityTemp.setVisibility(TextView.VISIBLE);
-//        currentCityTemp.setText(String.valueOf(currentTemp));
-//    }
-
     private void setListeners() {
-//        showCityInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String city = citySpinner.getSelectedItem().toString();
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putInt(PREF_LAST_CITY, citySpinner.getSelectedItemPosition());
-//                editor.apply();
-//
-//                Intent intent = new Intent(MainActivity.this, CityinfoActivity.class);
-//                intent.putExtra(INTENT_CITY, city);
-//                intent.putExtra(INTENT_WEATHER_FORECAST, forecastTypeRadioGroup.getCheckedRadioButtonId());
-//                intent.putExtra(INTENT_SHOW_PRESSURE, showPressureCheckBox.isChecked());
-//                //startActivity(intent);
-//                startActivityForResult(intent, REQUEST_CODE);
-//            }
-//        });
-
-//        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                tempSignTextView.setVisibility(TextView.INVISIBLE);
-//                currentCityTemp.setVisibility(TextView.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-
         forecastTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

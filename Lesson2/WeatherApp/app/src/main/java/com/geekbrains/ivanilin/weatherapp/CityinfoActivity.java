@@ -1,18 +1,25 @@
 package com.geekbrains.ivanilin.weatherapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 public class CityinfoActivity extends AppCompatActivity {
@@ -20,7 +27,6 @@ public class CityinfoActivity extends AppCompatActivity {
     private TextView cityNameLabel;
     private String cityName;
     private TextView cityTempLabel;
-    private Button showCityTempButton;
     private Button shareWithFriendButton;
 
     private static Random rnd = new Random();
@@ -30,28 +36,8 @@ public class CityinfoActivity extends AppCompatActivity {
     private int weatherForecastType;
     private int currentPressure;
     private TextView cityPressureLabel;
-    private RelativeLayout weekTempLayout;
-    private TextView day1Date;
-    private TextView day2Date;
-    private TextView day3Date;
-    private TextView day4Date;
-    private TextView day5Date;
-    private TextView day6Date;
-    private TextView day7Date;
-    private TextView day1Temp;
-    private TextView day2Temp;
-    private TextView day3Temp;
-    private TextView day4Temp;
-    private TextView day5Temp;
-    private TextView day6Temp;
-    private TextView day7Temp;
-    private TextView day1Pressure;
-    private TextView day2Pressure;
-    private TextView day3Pressure;
-    private TextView day4Pressure;
-    private TextView day5Pressure;
-    private TextView day6Pressure;
-    private TextView day7Pressure;
+    private RecyclerView weekTempLayout;
+    private WeekTempAdapter weekTempAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +53,7 @@ public class CityinfoActivity extends AppCompatActivity {
         setListeners();
 
         //showCityTempButton.callOnClick();
-        showCityTempButton.performClick();
+        showTemp();
     }
 
     @Override
@@ -75,28 +61,26 @@ public class CityinfoActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
     }
 
+    private void showTemp() {
+        currentTemp = (rnd.nextInt(20)) - 10;
+        cityTempLabel.setText(getString(R.string.show_temp_template, currentTemp));
+
+        if (showPressure) {
+            currentPressure = (rnd.nextInt(40)) + 740;
+            cityPressureLabel.setText(getString(R.string.show_pressure_template, currentPressure));
+        }
+
+        if (weatherForecastType == R.id.week_weather_forecast_radiobutton){
+            weekTempLayout.setVisibility(RecyclerView.VISIBLE);
+
+            weekTempAdapter = new WeekTempAdapter(new int[7], getApplicationContext());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            weekTempLayout.setAdapter(weekTempAdapter);
+            weekTempLayout.setLayoutManager(linearLayoutManager);
+
+        }
+    }
     private void setListeners() {
-        showCityTempButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentTemp = (rnd.nextInt(20)) - 10;
-                cityTempLabel.setText(getString(R.string.show_temp_template, currentTemp));
-
-                if (showPressure) {
-                    currentPressure = (rnd.nextInt(40)) + 740;
-                    cityPressureLabel.setText(getString(R.string.show_pressure_template, currentPressure));
-                }
-
-                if (weatherForecastType == R.id.week_weather_forecast_radiobutton){
-                    weekTempLoad();
-                }
-
-                Intent resultIntent = getIntent();
-                resultIntent.putExtra(MainActivity.CURRENT_CITY_TEMP, currentTemp);
-                setResult(RESULT_OK, resultIntent);
-            }
-        });
-
         shareWithFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,76 +92,71 @@ public class CityinfoActivity extends AppCompatActivity {
         });
     }
 
-    private void weekTempLoad() {
-        weekTempLayout.setVisibility(RelativeLayout.VISIBLE);
-        //day1
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day1Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day1Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day1Pressure.setText(String.valueOf(currentPressure));
+    static class WeekTempViewHolder extends RecyclerView.ViewHolder{
+        TextView dayWeatherDate;
+        TextView dayWeatherTemp;
+        ImageView dayWeatherImage;
+        TextView dayWeatherPressure;
+
+
+        public WeekTempViewHolder(View itemView) {
+            super(itemView);
+            dayWeatherDate = (TextView)itemView.findViewById(R.id.day_weather_list_item_date);
+            dayWeatherTemp = (TextView)itemView.findViewById(R.id.day_weather_list_item_temp);
+            dayWeatherImage = (ImageView)itemView.findViewById(R.id.day_weather_list_item_image);
+            dayWeatherPressure = (TextView)itemView.findViewById(R.id.day_weather_list_item_pressure);
         }
-        //day2
-        calendar.add(Calendar.DAY_OF_YEAR, 2);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day2Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day2Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day2Pressure.setText(String.valueOf(currentPressure));
+    }
+
+    class WeekTempAdapter extends RecyclerView.Adapter<WeekTempViewHolder>{
+        int[] days;
+        Context context;
+        Calendar calendar;
+
+        public WeekTempAdapter(int[] days, Context context) {
+            this.days = days;
+            this.context = context;
         }
 
-        //day3
-        calendar.add(Calendar.DAY_OF_YEAR, 3);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day3Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day3Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day3Pressure.setText(String.valueOf(currentPressure));
+        @Override
+        public WeekTempViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_weather_list_item, parent, false);
+            return new WeekTempViewHolder(itemView);
         }
 
-        //day4
-        calendar.add(Calendar.DAY_OF_YEAR, 4);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day4Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day4Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day4Pressure.setText(String.valueOf(currentPressure));
+        @Override
+        public void onBindViewHolder(WeekTempViewHolder holder, int position) {
+            calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, holder.getAdapterPosition() + 1);
+            holder.dayWeatherDate.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
+
+            currentTemp = (rnd.nextInt(20)) - 10;
+            holder.dayWeatherTemp.setText(getString(R.string.show_temp_template_short, currentTemp));
+
+            if (showPressure) {
+                currentPressure = (rnd.nextInt(40)) + 740;
+                holder.dayWeatherPressure.setText(getString(R.string.show_pressure_template_short, currentPressure));
+            }
+
+            switch (rnd.nextInt(4)) {
+                case 0:
+                    holder.dayWeatherImage.setImageResource(R.drawable.cloudy1);
+                    break;
+                case 1:
+                    holder.dayWeatherImage.setImageResource(R.drawable.drizzle1);
+                    break;
+                case 2:
+                    holder.dayWeatherImage.setImageResource(R.drawable.mostly_cloudy1);
+                    break;
+                case 3:
+                    holder.dayWeatherImage.setImageResource(R.drawable.sunny1);
+                    break;
+            }
         }
 
-        //day5
-        calendar.add(Calendar.DAY_OF_YEAR, 5);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day5Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day5Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day5Pressure.setText(String.valueOf(currentPressure));
-        }
-
-        //day6
-        calendar.add(Calendar.DAY_OF_YEAR, 6);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day6Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day6Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day6Pressure.setText(String.valueOf(currentPressure));
-        }
-
-        //day7
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-        currentTemp = (rnd.nextInt(20)) - 10;
-        day7Date.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
-        day7Temp.setText(getString(R.string.show_temp_template_short, currentTemp));
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            day7Pressure.setText(String.valueOf(currentPressure));
+        @Override
+        public int getItemCount() {
+            return days.length;
         }
     }
 
@@ -188,35 +167,9 @@ public class CityinfoActivity extends AppCompatActivity {
         cityTempLabel = (TextView)findViewById(R.id.city_temp_textview);
         cityPressureLabel = (TextView)findViewById(R.id.city_pressure_textview);
 
-        showCityTempButton = (Button)findViewById(R.id.show_temp_button);
         shareWithFriendButton = (Button)findViewById(R.id.share_with_button);
 
-        weekTempLayout = (RelativeLayout)findViewById(R.id.week_temperature_layout);
-
-        day1Date = (TextView)findViewById(R.id.day_1_date);
-        day2Date = (TextView)findViewById(R.id.day_2_date);
-        day3Date = (TextView)findViewById(R.id.day_3_date);
-        day4Date = (TextView)findViewById(R.id.day_4_date);
-        day5Date = (TextView)findViewById(R.id.day_5_date);
-        day6Date = (TextView)findViewById(R.id.day_6_date);
-        day7Date = (TextView)findViewById(R.id.day_7_date);
-
-        day1Temp = (TextView)findViewById(R.id.day_1_temp);
-        day2Temp = (TextView)findViewById(R.id.day_2_temp);
-        day3Temp = (TextView)findViewById(R.id.day_3_temp);
-        day4Temp = (TextView)findViewById(R.id.day_4_temp);
-        day5Temp = (TextView)findViewById(R.id.day_5_temp);
-        day6Temp = (TextView)findViewById(R.id.day_6_temp);
-        day7Temp = (TextView)findViewById(R.id.day_7_temp);
-
-        day1Pressure = (TextView)findViewById(R.id.day_1_pressure);
-        day2Pressure = (TextView)findViewById(R.id.day_2_pressure);
-        day3Pressure = (TextView)findViewById(R.id.day_3_pressure);
-        day4Pressure = (TextView)findViewById(R.id.day_4_pressure);
-        day5Pressure = (TextView)findViewById(R.id.day_5_pressure);
-        day6Pressure = (TextView)findViewById(R.id.day_6_pressure);
-        day7Pressure = (TextView)findViewById(R.id.day_7_pressure);
-
+        weekTempLayout = (RecyclerView) findViewById(R.id.week_temperature_recycle_layout);
     }
 
     @Override

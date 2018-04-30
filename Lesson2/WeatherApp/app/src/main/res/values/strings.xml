@@ -5,6 +5,7 @@
     <string name="show_temp_template">Temp %1$d C</string>
     <string name="show_temp_template_short">%1$d C</string>
     <string name="show_pressure_template">Pressure %1$d</string>
+    <string name="show_pressure_template_short">%1$d mmHG</string>
     <string name="share_temp_template">Today is a nice day! Weather in %1$s: %2$d C</string>
     <string name="city_weather_label">Current weather:</string>
     <string name="shareWith">Share</string>

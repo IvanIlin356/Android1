@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="4dp"
+    android:id="@+id/day_weather_list_item"
+    android:background="@color/colorGrey">
+
+    <TextView
+        android:id="@+id/day_weather_list_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text = "30/04"/>
+
+    <TextView
+        android:id="@+id/day_weather_list_item_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/day_weather_list_item_date"
+        android:textStyle="bold"
+        tools:text = "10 C"/>
+
+    <ImageView
+        android:id="@+id/day_weather_list_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        tools:src="@drawable/cloudy1"/>
+    <TextView
+        android:id="@+id/day_weather_list_item_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/day_weather_list_item_date"
+        android:layout_alignParentEnd="true"
+        tools:text = "760 mmHG"/>
+
+</RelativeLayout>
