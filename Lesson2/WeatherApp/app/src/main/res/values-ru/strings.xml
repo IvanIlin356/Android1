@@ -19,4 +19,8 @@
     <string name="show_pressure">Показать давление</string>
     <string name="show_temp_template">Температура %1$d C</string>
     <string name="show_pressure_template">Давление %1$d</string>
+    <string name="share_popup_temp_template">Прогноз погоды на %1$s в %2$s: %3$s C</string>
+    <string name="menu_item_exit">Выход</string>
+    <string name="menu_context_delete_item">Удалить</string>
+    <string name="menu_context_show_toast">Показать Toast</string>
 </resources>

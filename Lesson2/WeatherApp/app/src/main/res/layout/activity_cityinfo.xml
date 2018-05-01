@@ -34,11 +34,11 @@
         android:layout_above="@id/week_temperature_recycle_layout">
 
         <TextView
+            style="@style/showTempStyle"
             android:id="@+id/city_temp_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textStyle="bold"
             tools:text="Temp 3C" />
 
         <TextView

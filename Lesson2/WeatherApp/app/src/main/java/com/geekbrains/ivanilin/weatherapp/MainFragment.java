@@ -8,13 +8,19 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geekbrains.ivanilin.weatherapp.db.DataBase;
 
@@ -49,9 +55,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Log.d(LOG_TAG, "mainActivity - onCreate");
-//        setContentView(R.layout.fragment_main);
-
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -68,18 +72,74 @@ public class MainFragment extends Fragment {
         cityListRecyclerView.setAdapter(cityListAdapter);
         cityListRecyclerView.setLayoutManager(linearLayoutManager);
 
-
         loadPreferences();
-
-//        if (savedInstanceState != null){
-//            Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Read, value: " + savedInstanceState.getString(CURRENT_CITY_TEMP2));
-//            showCurrentTemp(savedInstanceState.getString(CURRENT_CITY_TEMP2));
-//        }
 
         setListeners();
 
+        //registerForContextMenu(cityListRecyclerView);
         return root;
     }
+
+    // ===== app bar menu =====
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_1:
+                Toast.makeText(getContext(), "menu_item_1", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_item_2:
+                Toast.makeText(getContext(), "menu_item_2", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_item_exit:
+                this.getActivity().finish();
+                return true;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // ===== context menu =====
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        //super.onCreateContextMenu(menu, v, menuInfo);
+//        getActivity().getMenuInflater().inflate(R.menu.menu_main_fragment_context, menu);
+//    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int position = -1;
+        try {
+            position = cityListAdapter.getPosition();
+        } catch (Exception e) {
+            return super.onContextItemSelected(item);
+        }
+
+        switch (item.getItemId()){
+            case R.id.menu_context_delete_item:
+                deleteCityFromList(position);
+                return true;
+            case R.id.menu_context_show_toast:
+                Toast.makeText(getContext(), "some toast", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void deleteCityFromList(int position) {
+        dataBase.getCityList().remove(position);
+        cityListAdapter.notifyDataSetChanged();
+    }
+
+    // =====  =====
 
     private void loadPreferences() {
         sharedPreferences = this.getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -140,7 +200,7 @@ public class MainFragment extends Fragment {
 
     // ==========  recycler ==========
 
-    static class CityListViewHolder extends RecyclerView.ViewHolder{
+    public static class CityListViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView cityItem;
         LinearLayout linearLayout;
 
@@ -148,12 +208,29 @@ public class MainFragment extends Fragment {
             super(itemView);
             cityItem = itemView.findViewById(R.id.city_name_recycler_list);
             linearLayout = itemView.findViewById(R.id.linear_layout_recycler_view);
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            //.getMenuInflater().inflate(R.menu.menu_main_fragment_context, menu);
+            menu.add(Menu.NONE, R.id.menu_context_delete_item, Menu.NONE, R.string.menu_context_delete_item);
+            menu.add(Menu.NONE, R.id.menu_context_show_toast, Menu.NONE, R.string.menu_context_show_toast);
         }
     }
 
-    class CityListAdapter extends RecyclerView.Adapter<CityListViewHolder>{
+    class CityListAdapter extends RecyclerView.Adapter<CityListViewHolder> {
         ArrayList<String> cities;
         Context context;
+        int position;
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
 
         public CityListAdapter(ArrayList<String> cities, Context context) {
             this.cities = cities;
@@ -168,7 +245,7 @@ public class MainFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final CityListViewHolder holder, int position) {
+        public void onBindViewHolder(final CityListViewHolder holder, final int position) {
             String city = cities.get(holder.getAdapterPosition());
             holder.cityItem.setText(city);
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +255,13 @@ public class MainFragment extends Fragment {
                 intent.putExtra(INTENT_WEATHER_FORECAST, forecastTypeRadioGroup.getCheckedRadioButtonId());
                 intent.putExtra(INTENT_SHOW_PRESSURE, showPressureCheckBox.isChecked());
                 startActivity(intent);
+                }
+            });
+            holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    setPosition(holder.getAdapterPosition());
+                    return false;
                 }
             });
         }

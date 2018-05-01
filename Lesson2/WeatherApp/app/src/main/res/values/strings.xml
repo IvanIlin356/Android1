@@ -7,6 +7,7 @@
     <string name="show_pressure_template">Pressure %1$d</string>
     <string name="show_pressure_template_short">%1$d mmHG</string>
     <string name="share_temp_template">Today is a nice day! Weather in %1$s: %2$d C</string>
+    <string name="share_popup_temp_template">Weather forecast at %1$s in the %2$s: %3$s C</string>
     <string name="city_weather_label">Current weather:</string>
     <string name="shareWith">Share</string>
     <string name="show_city_info">Show City information</string>
@@ -15,6 +16,12 @@
     <string name="one_day_weather_forecast">One day forecast</string>
     <string name="week_weather_forecast">Week forecast</string>
     <string name="show_pressure">Show pressure</string>
+    <string name="menu_item_1">item1</string>
+    <string name="menu_item_2">item2</string>
+    <string name="menu_item_exit">Close app</string>
+    <string name="menu_context_delete_item">Delete item</string>
+    <string name="menu_context_show_toast">Show Toast</string>
+    <string name="menu_context_add_item">Add item</string>
     <string-array name="cities_list">
         <item>Berlin</item>
         <item>Moscow</item>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_1"
+        android:title="@string/menu_item_1"
+        android:icon="@android:drawable/ic_dialog_alert"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_item_2"
+        android:title="@string/menu_item_2"
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_item_exit"
+        android:title="@string/menu_item_exit"
+        android:icon="@android:drawable/ic_menu_revert"
+        app:showAsAction="never"/>
+</menu>

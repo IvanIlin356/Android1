@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/day_weather_list_item_date"
-        android:textStyle="bold"
+        style="@style/showTempStyle"
         tools:text = "10 C"/>
 
     <ImageView

@@ -9,10 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +55,26 @@ public class CityinfoActivity extends AppCompatActivity {
         //showCityTempButton.callOnClick();
         showTemp();
     }
+
+//    public void showPopup(View v){
+//        PopupMenu popupMenu = new PopupMenu(this, v);
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                switch (item.getItemId()){
+//                    case R.id.menu_popup_share_with:
+//                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//                        shareIntent.setType("text/plain");
+//                        shareIntent.putExtra(Intent.EXTRA_TEXT, "");
+//                        startActivity(shareIntent);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//        popupMenu.inflate(R.menu.menu_popup_week);
+//        popupMenu.show();
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -94,6 +117,7 @@ public class CityinfoActivity extends AppCompatActivity {
         TextView dayWeatherTemp;
         ImageView dayWeatherImage;
         TextView dayWeatherPressure;
+        RelativeLayout dayWeatherLayout;
 
 
         public WeekTempViewHolder(View itemView) {
@@ -102,6 +126,7 @@ public class CityinfoActivity extends AppCompatActivity {
             dayWeatherTemp = (TextView)itemView.findViewById(R.id.day_weather_list_item_temp);
             dayWeatherImage = (ImageView)itemView.findViewById(R.id.day_weather_list_item_image);
             dayWeatherPressure = (TextView)itemView.findViewById(R.id.day_weather_list_item_pressure);
+            dayWeatherLayout = (RelativeLayout)itemView.findViewById(R.id.day_weather_list_item);
         }
     }
 
@@ -122,7 +147,7 @@ public class CityinfoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(WeekTempViewHolder holder, int position) {
+        public void onBindViewHolder(final WeekTempViewHolder holder, int position) {
             calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, holder.getAdapterPosition() + 1);
             holder.dayWeatherDate.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
@@ -149,6 +174,33 @@ public class CityinfoActivity extends AppCompatActivity {
                     holder.dayWeatherImage.setImageResource(R.drawable.sunny1);
                     break;
             }
+
+            holder.dayWeatherLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.menu_popup_share_with:
+                                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                    shareIntent.setType("text/plain");
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_popup_temp_template,
+                                            holder.dayWeatherDate.getText().toString(),
+                                            cityName,
+                                            holder.dayWeatherTemp.getText().toString()));
+                                    startActivity(shareIntent);
+                                    return true;
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.inflate(R.menu.menu_popup_week);
+                    popupMenu.show();
+                    return false;
+                }
+            });
         }
 
         @Override
