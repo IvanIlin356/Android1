@@ -3,9 +3,11 @@
     <string name="weather_app_greetings">Select city:</string>
     <string name="show_temp">Temperature</string>
     <string name="show_temp_template">Temp %1$d C</string>
-    <string name="show_temp_template_short">%1$d C</string>
+    <string name="show_temp_template_short">%1$s C</string>
+    <string name="show_temp_template_short2">%1$s C, %2$s</string>
     <string name="show_pressure_template">Pressure %1$d</string>
-    <string name="show_pressure_template_short">%1$d mmHG</string>
+    <string name="show_pressure_template_short">%1$d hPa</string>
+    <string name="show_pressure_template_short2">%1$s hPa</string>
     <string name="share_temp_template">Today is a nice day! Weather in %1$s: %2$d C</string>
     <string name="share_popup_temp_template">Weather forecast at %1$s in the %2$s: %3$s C</string>
     <string name="city_weather_label">Current weather:</string>
@@ -22,6 +24,7 @@
     <string name="menu_context_delete_item">Delete item</string>
     <string name="menu_context_show_toast">Show Toast</string>
     <string name="menu_context_add_item">Add item</string>
+    <string name="json_not_found">JSON not found</string>
     <string-array name="cities_list">
         <item>Berlin</item>
         <item>Moscow</item>

@@ -3,6 +3,7 @@ package com.geekbrains.ivanilin.weatherapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,6 +44,10 @@ public class CityinfoActivity extends AppCompatActivity {
     private RecyclerView weekTempLayout;
     private WeekTempAdapter weekTempAdapter;
 
+    private final Handler handler = new Handler();
+
+    private JSONArray weatherArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,50 +65,78 @@ public class CityinfoActivity extends AppCompatActivity {
         showTemp();
     }
 
-//    public void showPopup(View v){
-//        PopupMenu popupMenu = new PopupMenu(this, v);
-//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                switch (item.getItemId()){
-//                    case R.id.menu_popup_share_with:
-//                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//                        shareIntent.setType("text/plain");
-//                        shareIntent.putExtra(Intent.EXTRA_TEXT, "");
-//                        startActivity(shareIntent);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//        popupMenu.inflate(R.menu.menu_popup_week);
-//        popupMenu.show();
-//    }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
     private void showTemp() {
-        currentTemp = (rnd.nextInt(20)) - 10;
-        cityTempLabel.setText(getString(R.string.show_temp_template, currentTemp));
+//        currentTemp = (rnd.nextInt(20)) - 10;
+//        cityTempLabel.setText(getString(R.string.show_temp_template, currentTemp));
 
-        if (showPressure) {
-            currentPressure = (rnd.nextInt(40)) + 740;
-            cityPressureLabel.setText(getString(R.string.show_pressure_template, currentPressure));
+        updateWeatherData(cityName);
+
+//        if (showPressure) {
+//            currentPressure = (rnd.nextInt(40)) + 740;
+//            cityPressureLabel.setText(getString(R.string.show_pressure_template, currentPressure));
+//        }
+
+    }
+
+    private void updateWeatherData(final String city){
+        new Thread(){
+            public void run(){
+                final JSONObject jsonObject = WeatherData.getJSONdata(getApplicationContext(), city);
+                if (jsonObject == null){
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), getString(R.string.json_not_found), Toast.LENGTH_SHORT);
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            renderWeather(jsonObject);
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
+    private void renderWeather(JSONObject jsonObject) {
+        try {
+            weatherArray = jsonObject.getJSONArray("list");
+            // 1
+            cityTempLabel.setText(getString(R.string.show_temp_template_short2,
+                    weatherArray.getJSONObject(0).getJSONObject("main").getString("temp"),
+                    weatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).getString("main")));
+            if (showPressure){
+                cityPressureLabel.setText(getString(R.string.show_pressure_template_short2, weatherArray.getJSONObject(0).getJSONObject("main").getString("pressure")));
+            }
+
+            if (weatherForecastType == R.id.week_weather_forecast_radiobutton) {
+                weekTempLayout.setVisibility(RecyclerView.VISIBLE);
+            }
+
+
+            if (weatherForecastType == R.id.week_weather_forecast_radiobutton){
+                weekTempLayout.setVisibility(RecyclerView.VISIBLE);
+
+                weekTempAdapter = new WeekTempAdapter(new int[7], getApplicationContext(), weatherArray);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                weekTempLayout.setAdapter(weekTempAdapter);
+                weekTempLayout.setLayoutManager(linearLayoutManager);
+
+            }
+
+
         }
-
-        if (weatherForecastType == R.id.week_weather_forecast_radiobutton){
-            weekTempLayout.setVisibility(RecyclerView.VISIBLE);
-
-            weekTempAdapter = new WeekTempAdapter(new int[7], getApplicationContext());
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            weekTempLayout.setAdapter(weekTempAdapter);
-            weekTempLayout.setLayoutManager(linearLayoutManager);
+        catch (Exception e){
 
         }
     }
+
     private void setListeners() {
         shareWithFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +171,12 @@ public class CityinfoActivity extends AppCompatActivity {
         int[] days;
         Context context;
         Calendar calendar;
+        JSONArray jsonArray;
 
-        public WeekTempAdapter(int[] days, Context context) {
+        public WeekTempAdapter(int[] days, Context context, JSONArray jsonArray) {
             this.days = days;
             this.context = context;
+            this.jsonArray = jsonArray;
         }
 
         @Override
@@ -152,27 +191,40 @@ public class CityinfoActivity extends AppCompatActivity {
             calendar.add(Calendar.DAY_OF_YEAR, holder.getAdapterPosition() + 1);
             holder.dayWeatherDate.setText(new SimpleDateFormat("dd/MM").format(calendar.getTime()));
 
-            currentTemp = (rnd.nextInt(20)) - 10;
-            holder.dayWeatherTemp.setText(getString(R.string.show_temp_template_short, currentTemp));
+            try {
+                holder.dayWeatherTemp.setText(getString(
+                        R.string.show_temp_template_short,
+                        jsonArray.getJSONObject(holder.getAdapterPosition() + 1).getJSONObject("main").getString("temp")));
 
-            if (showPressure) {
-                currentPressure = (rnd.nextInt(40)) + 740;
-                holder.dayWeatherPressure.setText(getString(R.string.show_pressure_template_short, currentPressure));
-            }
+                if (showPressure) {
+                    holder.dayWeatherPressure.setText(getString(
+                            R.string.show_pressure_template_short2,
+                            jsonArray.getJSONObject(holder.getAdapterPosition() + 1).getJSONObject("main").getString("pressure")));
+                }
 
-            switch (rnd.nextInt(4)) {
-                case 0:
+
+            switch (jsonArray.getJSONObject(holder.getAdapterPosition() + 1).getJSONArray("weather").getJSONObject(0).getString("icon")) {
+                case "03d":
+                case "04d":
                     holder.dayWeatherImage.setImageResource(R.drawable.cloudy1);
                     break;
-                case 1:
+                case "09d":
+                case "10d":
+                case "11d":
                     holder.dayWeatherImage.setImageResource(R.drawable.drizzle1);
                     break;
-                case 2:
+                case "02d":
                     holder.dayWeatherImage.setImageResource(R.drawable.mostly_cloudy1);
                     break;
-                case 3:
+                case "01d":
                     holder.dayWeatherImage.setImageResource(R.drawable.sunny1);
                     break;
+            }
+
+            }
+            catch (Exception e)
+            {
+                Log.d("weatherData_getJson", "error", e);
             }
 
             holder.dayWeatherLayout.setOnLongClickListener(new View.OnLongClickListener() {
@@ -219,37 +271,5 @@ public class CityinfoActivity extends AppCompatActivity {
         shareWithFriendButton = (Button)findViewById(R.id.share_with_button);
 
         weekTempLayout = (RecyclerView) findViewById(R.id.week_temperature_recycle_layout);
-    }
-
-    @Override
-    protected void onStart() {
-        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onStart");
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onResume");
-        super.onResume();
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onPause");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onStop");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(MainFragment.LOG_TAG, "cityInfoActivity - onDestroy");
-        super.onDestroy();
     }
 }

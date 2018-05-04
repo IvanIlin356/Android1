@@ -7,13 +7,11 @@ public class DataBase {
 
     public DataBase(){
         cityList = new ArrayList<String>();
-        cityList.add("Москва");
-        cityList.add("Берлин");
-        cityList.add("Нью-Йорк");
-        cityList.add("Токио");
-        cityList.add("Прага");
-        cityList.add("Лондон");
-        cityList.add("Лима");
+        cityList.add("Moscow");
+        cityList.add("Berlin");
+        cityList.add("New York");
+        cityList.add("Tokyo");
+        cityList.add("London");
     }
 
     public ArrayList<String> getCityList() {
