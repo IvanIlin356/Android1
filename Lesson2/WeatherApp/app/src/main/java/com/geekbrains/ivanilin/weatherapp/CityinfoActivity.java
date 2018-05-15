@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class CityinfoActivity extends AppCompatActivity {
     private TextView cityNameLabel;
     private String cityName;
     private TextView cityTempLabel;
-    private Button shareWithFriendButton;
+    //private Button shareWithFriendButton;
 
     private static Random rnd = new Random();
 
@@ -47,6 +49,7 @@ public class CityinfoActivity extends AppCompatActivity {
     private final Handler handler = new Handler();
 
     private JSONArray weatherArray;
+    private FloatingActionButton shareCurrentTempFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +141,7 @@ public class CityinfoActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        shareWithFriendButton.setOnClickListener(new View.OnClickListener() {
+        shareCurrentTempFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -150,11 +153,11 @@ public class CityinfoActivity extends AppCompatActivity {
     }
 
     static class WeekTempViewHolder extends RecyclerView.ViewHolder{
-        TextView dayWeatherDate;
-        TextView dayWeatherTemp;
-        ImageView dayWeatherImage;
-        TextView dayWeatherPressure;
-        RelativeLayout dayWeatherLayout;
+        private TextView dayWeatherDate;
+        private TextView dayWeatherTemp;
+        private ImageView dayWeatherImage;
+        private TextView dayWeatherPressure;
+        private CardView dayWeatherLayout;
 
 
         public WeekTempViewHolder(View itemView) {
@@ -163,15 +166,15 @@ public class CityinfoActivity extends AppCompatActivity {
             dayWeatherTemp = (TextView)itemView.findViewById(R.id.day_weather_list_item_temp);
             dayWeatherImage = (ImageView)itemView.findViewById(R.id.day_weather_list_item_image);
             dayWeatherPressure = (TextView)itemView.findViewById(R.id.day_weather_list_item_pressure);
-            dayWeatherLayout = (RelativeLayout)itemView.findViewById(R.id.day_weather_list_item);
+            dayWeatherLayout = (CardView) itemView.findViewById(R.id.day_weather_list_item);
         }
     }
 
     class WeekTempAdapter extends RecyclerView.Adapter<WeekTempViewHolder>{
-        int[] days;
-        Context context;
-        Calendar calendar;
-        JSONArray jsonArray;
+        private int[] days;
+        private Context context;
+        private Calendar calendar;
+        private JSONArray jsonArray;
 
         public WeekTempAdapter(int[] days, Context context, JSONArray jsonArray) {
             this.days = days;
@@ -268,8 +271,8 @@ public class CityinfoActivity extends AppCompatActivity {
         cityTempLabel = (TextView)findViewById(R.id.city_temp_textview);
         cityPressureLabel = (TextView)findViewById(R.id.city_pressure_textview);
 
-        shareWithFriendButton = (Button)findViewById(R.id.share_with_button);
-
         weekTempLayout = (RecyclerView) findViewById(R.id.week_temperature_recycle_layout);
+
+        shareCurrentTempFab = (FloatingActionButton)findViewById(R.id.share_current_temp_fab);
     }
 }

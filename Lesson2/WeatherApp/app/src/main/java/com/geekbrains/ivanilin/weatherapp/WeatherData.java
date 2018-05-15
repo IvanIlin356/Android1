@@ -15,7 +15,7 @@ public class WeatherData {
     //private static final String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
     private static final String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric";
     private static final String KEY_NAME = "x-api-key";
-    private static final String API_KEY = "2bcc2b628b3d3a3ae459b1f80f45b63e";
+    //private static final String API_KEY = "2bcc2b628b3d3a3ae459b1f80f45b63e";
     private static final String RESPONSE = "cod";
     private static final String NEW_LINE = "\n";
     private static final int ALL_GOOD = 200;
@@ -25,7 +25,7 @@ public class WeatherData {
         try {
             URL url = new URL(String.format(OPEN_WEATHER_MAP_API, city));
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.addRequestProperty(KEY_NAME, API_KEY);
+            connection.addRequestProperty(KEY_NAME, context.getString(R.string.weather_api_key));
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder rawData = new StringBuilder(1024);

@@ -25,6 +25,7 @@
     <string name="menu_context_show_toast">Show Toast</string>
     <string name="menu_context_add_item">Add item</string>
     <string name="json_not_found">JSON not found</string>
+    <string name="weather_api_key">2bcc2b628b3d3a3ae459b1f80f45b63e</string>
     <string-array name="cities_list">
         <item>Berlin</item>
         <item>Moscow</item>

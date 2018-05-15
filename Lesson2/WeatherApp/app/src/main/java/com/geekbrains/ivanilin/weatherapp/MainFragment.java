@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -92,7 +94,9 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_1:
-                Toast.makeText(getContext(), "menu_item_1", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "menu_item_1", Toast.LENGTH_SHORT).show();
+                Snackbar.make(cityListRecyclerView, "snackbar_test1", Snackbar.LENGTH_SHORT).
+                    setAction("snackbar_action", null).show();
                 return true;
             case R.id.menu_item_2:
                 Toast.makeText(getContext(), "menu_item_2", Toast.LENGTH_SHORT).show();
@@ -153,22 +157,22 @@ public class MainFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
 //        Log.d(LOG_TAG, "mainActivity - onSaveInsctanceState Save, value: " + currentCityTemp.getText().toString());
 //        outState.putString(CURRENT_CITY_TEMP2, currentCityTemp.getText().toString());
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+//        super.onSaveInstanceState(outState);
+//
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
 //        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
 //            if (data != null){
 //            }
 //        }
-    }
+//    }
 
     private void setListeners() {
         forecastTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -201,8 +205,8 @@ public class MainFragment extends Fragment {
     // ==========  recycler ==========
 
     public static class CityListViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
-        TextView cityItem;
-        LinearLayout linearLayout;
+        private TextView cityItem;
+        private CardView linearLayout;
 
         public CityListViewHolder(View itemView) {
             super(itemView);
